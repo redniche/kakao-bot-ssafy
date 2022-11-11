@@ -1,0 +1,36 @@
+# KakaoBotSsafy의 서버 도커 컴포즈 yml, Kakao app에 등록되는 bot입니다.
+# DB는 mongodb 6.0.2 버전을 사용합니다. 
+# 무중단 배포를 위한 docker-compose.green.yml 파일입니다.
+# docker-compose.green.yml 파일은 docker-compose.yml 파일과 같은 위치에 있어야 합니다.
+# nginx는 80번 포트를 사용합니다.
+# certbot은 80번 포트를 사용합니다.
+
+
+version: '3.7'
+services:
+  server:
+    image: ssafy/kakao-bot-server
+    container_name: kakao-bot-server
+    restart: always
+    ports:
+      - 8080:8080
+    environment:
+      - MONGO_URI=mongodb://mongo:27017
+      - PORT=3000
+      - KAKAO_API_KEY=카카오 api key
+      - KAKAO_ADMIN_KEY=카카오 admin key
+    networks:
+      - kakao-bot-ssafy-network
+  mongo:
+    image: mongo:6.0.2
+    container_name: kakao-bot-mongo
+    restart: always
+    ports:
+      - '27017:27017'
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=mongo
+      - MONGO_INITDB_ROOT_PASSWORD=botssafy123!@#
+    networks:
+      - kakao-bot-ssafy-network
+
+    
